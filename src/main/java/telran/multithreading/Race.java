@@ -1,46 +1,38 @@
 package telran.multithreading;
 
-import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.concurrent.locks.*;
 
 public class Race {
-    private int distance;
-    private int minSleep;
-    private int maxSleep;
-    private long startTime;
-    private final List<String> results = new ArrayList<>();
-    private final AtomicInteger placeCounter = new AtomicInteger(1);
-
-    public Race(int distance, int minSleep, int maxSleep) {
-        this.distance = distance;
-        this.minSleep = minSleep;
-        this.maxSleep = maxSleep;
-        this.startTime = System.currentTimeMillis();
-    }
-
-    public int getDistance() {
-        return distance;
-    }
-
-    public int getMinSleep() {
-        return minSleep;
-    }
-
-    public int getMaxSleep() {
-        return maxSleep;
-    }
-
-    public long getStartTime() {
-        return startTime;
-    }
-
-    public synchronized void addResult(int racerNumber, long finishTime) {
-        long runningTime = finishTime - startTime;
-        results.add(String.format("%-6d %-12d %-15d",
-                placeCounter.getAndIncrement(), racerNumber, runningTime));
-    }
-
-    public List<String> getResults() {
-        return results;
-    }
+	private int distance;
+	private int minSleep;
+	private int maxSleep;
+	private ArrayList<Racer> resultsTable;
+	private Instant startTime;
+	Lock lock = new ReentrantLock(true);
+	public Race(int distance, int minSleep, int maxSleep, ArrayList<Racer> resultsTable, Instant startTime) {
+		this.distance = distance;
+		this.minSleep = minSleep;
+		this.maxSleep = maxSleep;
+		this.resultsTable = resultsTable;
+		this.startTime = startTime;
+	}
+	public ArrayList<Racer> getResultsTable() {
+		return resultsTable;
+	}
+	public Instant getStartTime() {
+		return startTime;
+	}
+	
+	public int getDistance() {
+		return distance;
+	}
+	public int getMinSleep() {
+		return minSleep;
+	}
+	public int getMaxSleep() {
+		return maxSleep;
+	}
+	
 }
